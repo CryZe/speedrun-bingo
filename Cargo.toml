@@ -1,0 +1,9 @@
+[package]
+name = "speedrun-bingo"
+version = "0.1.0"
+authors = ["Christopher Serr <christopher.serr@gmail.com>"]
+
+[dependencies]
+serde_json = "0.9.8"
+serde_derive = "0.9.9"
+serde = "0.9.9"
