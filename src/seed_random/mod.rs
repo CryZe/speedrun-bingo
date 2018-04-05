@@ -1,3 +1,29 @@
+use arrayvec::ArrayVec;
+
+#[cfg(not(feature = "std"))]
+trait Float {
+    fn powi(&self, exp: usize) -> Self;
+}
+
+#[cfg(not(feature = "std"))]
+impl Float for f64 {
+    fn powi(&self, mut n: usize) -> Self {
+        let mut x = *self;
+        if n == 0 {
+            return 1.0;
+        }
+        let mut y = 1.0;
+        while n > 1 {
+            if n & 1 != 0 {
+                y *= x;
+            }
+            x *= x;
+            n >>= 1;
+        }
+        x * y
+    }
+}
+
 mod arc4;
 
 use self::arc4::Arc4;
@@ -8,13 +34,11 @@ const WIDTH: usize = 256;
 const CHUNKS: usize = 6;
 
 impl SeedRandom {
-    pub fn new<I>(seed: I) -> Self
-        where I: IntoIterator<Item = u8>
-    {
-        let seed = seed.into_iter().map(|b| b as f64).collect::<Vec<_>>();
+    pub fn new(seed: ArrayVec<[u8; 10]>) -> Self {
+        let seed = seed.into_iter().map(|b| b as f64).collect();
 
         // Use the seed to initialize an ARC4 generator.
-        SeedRandom(Arc4::new(&seed, WIDTH))
+        SeedRandom(Arc4::new(seed, WIDTH))
     }
 
     pub fn next(&mut self) -> f64 {

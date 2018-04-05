@@ -4,9 +4,16 @@ version = "0.1.0"
 authors = ["Christopher Serr <christopher.serr@gmail.com>"]
 
 [dependencies]
-serde_json = "1.0.2"
-serde_derive = "1.0.6"
-serde = "1.0.6"
-rusttype = "0.2.1"
-image = "0.13.0"
-imageproc = { git = "https://github.com/PistonDevelopers/imageproc", rev = "3af8dd85a61cef51867c022a4a77c81ca9a774fb"}
+arrayvec = { version = "0.4.7", default-features = false, features = ["serde-1"] }
+serde_json = { version = "1.0.2", optional = true }
+serde_derive = { version = "1.0.6" }
+serde = { version = "1.0.6", default-features = false }
+serde-json-core = { git = "https://github.com/japaric/serde-json-core", rev = "d365ef8b2c1865fa52e5f5730c456054d3814d9b", optional = true }
+rusttype = { version = "0.4.3", optional = true }
+image = { version = "0.18.0", optional = true }
+imageproc = { version = "0.14.0", optional = true }
+
+[features]
+default = ["std"]
+std = ["serde_json", "serde/std", "rusttype", "image", "imageproc"]
+json_core = ["serde-json-core"]
